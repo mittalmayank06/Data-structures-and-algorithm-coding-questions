@@ -1,0 +1,72 @@
+
+import java.util.*;
+public class HelloWorld{
+
+        
+        static int pred(char ch)
+        {
+            switch(ch)
+            {
+                case '+':
+                case '-':return 1;
+                case '*':
+                case '/': return 2;
+                case '^':return 3;
+                
+            }
+            return -1;
+        }
+       public static String infixToPostfix(String exp)
+       {
+       // Array deque is fast than stack.
+           Deque<Character> stack = new ArrayDeque<>();
+           String result= new String("");
+           for(int i=0;i<exp.length();i++)
+           {
+               char ch = exp.charAt(i);
+               if(Character.isLetterOrDigit(ch))
+               {
+                   result += ch;
+               }
+               else if(ch=='(')
+               {
+                   stack.push(ch);
+               }
+               else if(ch==')')
+               {
+                   while(!stack.isEmpty() && stack.peek()!='(')
+                   {
+                       result += stack.pop();
+                   }
+                   stack.pop();
+               }
+               //check for symbols
+               else {
+                   while(!stack.isEmpty() && pred(ch)<=pred(stack.peek()))
+                   {
+                       result += stack.pop();
+                   }
+                   stack.push(ch);
+               }
+           }
+           while(!stack.isEmpty() ) {
+               if(stack.peek()=='(')
+               {
+                   System.out.println("invalid infix expression");
+               }
+               result +=stack.pop();
+           }
+           return result;
+       }
+        
+        public static void main(String[] args)
+        {
+            Scanner sc= new Scanner(System.in);
+            String exp= sc.next();
+            String result=infixToPostfix(exp);
+           
+                System.out.println(result);
+            
+        }
+     
+}
